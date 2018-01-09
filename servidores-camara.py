@@ -4,18 +4,18 @@ import pandas
 
 urldapagina1 = "http://camarademaceio.al.gov.br/transparencia/folha-pagamento/" #AQUI ACESSA A PAGINA
 urldapagina2 = 1
-urldapagina3 = "?nome=SEU+NOME&cpf=SEUCPF"
+urldapagina3 = "?nome=SEU+NOME&cpf=SEUCPF" #altere inserindo seu nome e seu cpf sem pontuação e sem espaços
 
 
-   # while urldapagina2 < 5028:
+   
 planilhadosservidores = [] #Lista de dicionários contendo... ("servidor":"nome","Matricula":"numerodematricula","")
-while urldapagina2 < 2:
+while urldapagina2 < 2: #A última página é a 5027 - colocar 5028 para dados completos
 
     pagina = requests.get(urldapagina1 + str(urldapagina2) + urldapagina3) #CAPTURA A PAGINA
     pagina = BeautifulSoup(pagina.content, 'html.parser') #transforma a pagina em algo legível
        
     tabeladoservidor = pagina.find_all("td") #tabeladoservidor é uma lista com tudo na página dentro de 'td'
-    nome = tabeladoservidor[3].text 
+    nome = tabeladoservidor[3].text #O .text retira todos os espaços e tags deixando só o necessário
     matricula = tabeladoservidor[1].text
     cargo = tabeladoservidor[5].text
     remuneracao = float((tabeladoservidor[9].text.strip('R$ ')).replace('.','').replace(',','.')) #Retirei o simbolo de R$ e adequei a pontuação para um float
@@ -29,6 +29,6 @@ while urldapagina2 < 2:
     planilhadosservidores.append(dicionariodoservidor)
     urldapagina2 += 1
 dadosservidores = pandas.DataFrame(planilhadosservidores)
-dadosservidores = dadosservidores[['Servidor', 'Matrícula', 'Cargo','Remuneração','Abono','Eventuais','Descontos','Salario','Mês de Referência','Ano de Referência']]
+dadosservidores = dadosservidores[['Servidor', 'Matrícula', 'Cargo','Remuneração','Abono','Eventuais','Descontos','Salario','Mês de Referência','Ano de Referência']] #Apenas organizando as colunas, que por padrão são postas em ordem alfabética
 dadosservidores.sort_values(by="Salario",ascending=False)
 dadosservidores.to_csv("listagemdosservidores.csv", encoding="utf-8")
