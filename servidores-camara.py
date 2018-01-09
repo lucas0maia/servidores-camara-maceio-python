@@ -4,7 +4,7 @@ import pandas
 
 urldapagina1 = "http://camarademaceio.al.gov.br/transparencia/folha-pagamento/" #AQUI ACESSA A PAGINA
 urldapagina2 = 1
-urldapagina3 = "?nome=SEU+NOME&cpf=05047675424"
+urldapagina3 = "?nome=SEU+NOME&cpf=SEUCPF"
 
 
    # while urldapagina2 < 5028:
