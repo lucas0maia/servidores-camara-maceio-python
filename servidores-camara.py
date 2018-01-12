@@ -4,12 +4,11 @@ import pandas
 
 urldapagina1 = "http://camarademaceio.al.gov.br/transparencia/folha-pagamento/" #AQUI ACESSA A PAGINA
 urldapagina2 = 1
-urldapagina3 = "?nome=SEU+NOME&cpf=SEUCPF" #altere inserindo seu nome e seu cpf sem pontuação e sem espaços
+urldapagina3 = "?nome=Seu+Nome&cpf=seucepf" #altere inserindo seu nome e seu cpf sem pontuação e sem espaços
 
-
-   
+print('Feita análise da página:')   
 planilhadosservidores = [] #Lista de dicionários contendo... ("servidor":"nome","Matricula":"numerodematricula","")
-while urldapagina2 < 2: #A última página é a 5027 - colocar 5028 para dados completos
+while urldapagina2 < 5: #A última página é a 5027 - colocar 5028 para dados completos
 
     pagina = requests.get(urldapagina1 + str(urldapagina2) + urldapagina3) #CAPTURA A PAGINA
     pagina = BeautifulSoup(pagina.content, 'html.parser') #transforma a pagina em algo legível
@@ -25,10 +24,11 @@ while urldapagina2 < 2: #A última página é a 5027 - colocar 5028 para dados c
     salario = float((tabeladoservidor[17].text.strip('R$ ')).replace('.','').replace(',','.'))
     mesreferencia = (tabeladoservidor[7]).text.split('/')[0]
     anodereferencia = (tabeladoservidor[7]).text.split('/')[1]
-    dicionariodoservidor = {"Servidor":nome, "Matrícula":matricula, "Cargo":cargo, "Remuneração":remuneracao, "Abono":abono, "Eventuais":eventuais, "Descontos":descontos, "Salario":salario,"Mês de Referência":mesreferencia, "Ano de Referência":anodereferencia}
+    dicionariodoservidor = {"Servidor":nome, "Matrícula":matricula, "Cargo":cargo, "Remuneração":remuneracao, "Abono":abono, "Eventuais":eventuais, "Descontos":descontos, "Salario":salario,"MesRef":mesreferencia, "AnoRef":anodereferencia}
     planilhadosservidores.append(dicionariodoservidor)
+    print(urldapagina2, end=" ") #Informa a página que está sendo analisada
     urldapagina2 += 1
 dadosservidores = pandas.DataFrame(planilhadosservidores)
-dadosservidores = dadosservidores[['Servidor', 'Matrícula', 'Cargo','Remuneração','Abono','Eventuais','Descontos','Salario','Mês de Referência','Ano de Referência']] #Apenas organizando as colunas, que por padrão são postas em ordem alfabética
+dadosservidores = dadosservidores[['Servidor', 'Matrícula', 'Cargo','Remuneração','Abono','Eventuais','Descontos','Salario','MesRef','AnoRef']] #Apenas organizando as colunas, que por padrão são postas em ordem alfabética
 dadosservidores.sort_values(by="Salario",ascending=False)
 dadosservidores.to_csv("listagemdosservidores.csv", encoding="utf-8")
