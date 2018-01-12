@@ -1,8 +1,7 @@
 #Trata alguns dados do csv construído para gerar informações relevantes 
 
 import pandas
-%matplotlib inline
-import matplotlib.pyplot as plt
+
 mes = "Novembro"
 ano = 2017
 listagemservidores = pandas.read_csv("listagemdosservidores.csv")
